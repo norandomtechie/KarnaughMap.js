@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnaugh Map dev</title>
+    <style>
+        #editor {
+            width: 100%;
+            height: 35vh;
+            margin-bottom: 10px;
+        }
+        #render {
+            width: 7vw;
+            height: 4vh;
+            font-size: 14px;
+            background: transparent;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+        #host {
+            width: 100%; 
+            height: max-content; 
+            border-bottom: 1px solid black; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            justify-content: center;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="host">
+        <div id="editor"></div>
+        <button id="render">Render</button>
+    </div>
+    <div id='kmap1'></div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid black">
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width: 100%">
+            <p>#q1_circle</p>
+            <input type="text" style="width: 800px; margin-bottom: 5px" id="q1_circle">
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width: 100%">
+            <p>#q1_value</p>
+            <input type="text" style="width: 800px; margin-bottom: 5px" id="q1_value">
+        </div>
+    </div>
+    <div id='kmap2'></div>
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid black">
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width: 100%">
+            <p>#q2_circle</p>
+            <input type="text" style="width: 800px; margin-bottom: 5px" id="q2_circle">
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: space-evenly; width: 100%">
+            <p>#q2_value</p>
+            <input type="text" style="width: 800px; margin-bottom: 5px" id="q2_value">
+        </div>
+    </div>
+</body>
+<link href="kmap.css" rel="stylesheet">
+<script src="kmap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.11/ace.js"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/chrome");
+    editor.session.setMode("ace/mode/javascript");
+    editor.session.setValue ([
+    'window.kmap1 = new KarnaughMap (document.getElementById ("kmap1"), {',
+    '    kvariables: ["W", "X", "Y", "Z"],',
+    '    kvalues: "1110101010101000",',
+    '    kcircles: [',
+    '    { "type": "e", "minterms": [9,1,3,5,7,13,15,11] },',
+    '    { "type": "n", "minterms": [12,13,15,14] },',
+    '    { "type": "e", "minterms": [5,7,13,15] },',
+    '    { "type": "e", "minterms": [2,0,6,4] },',
+    '    { "type": "n", "minterms": [10,8] }',
+    '    ],',
+    '    fixedValues: false,',
+    '    fixedCircles: false,',
+    '    fields: ["#q1_value", "#q1_circle"]',
+    '})\n',
+    'window.kmap2 = new KarnaughMap (document.getElementById ("kmap2"), {',
+    '    kvariables: ["W", "X", "Y"],',
+    '    fixedValues: false,',
+    '    fixedCircles: false,',
+    '    fields: ["#q2_value", "#q2_circle"]',
+    '});'
+    ].join ('\n'))
+    document.getElementById ('render').addEventListener ('click', e => {
+        eval (editor.session.getValue())
+    })
+</script>
+</html>
